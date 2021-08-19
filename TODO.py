@@ -1,7 +1,6 @@
 #Fechas
 import datetime
 from datetime import datetime,date,timedelta,time
-from typing import Optional
 
 #Notificaciones
 from win10toast import ToastNotifier
@@ -12,6 +11,13 @@ header_text = []
 text_todo = []
 #Fechas de asignación de deberes
 dead_line = []
+#Una semana antes
+one_week_notify = []
+#Cinco días antes
+five_days_notify = []
+#Tres días antes
+three_day_notify = []
+
 
 #Guardar datos con formato de fecha
 def cast_month(month):
@@ -38,42 +44,42 @@ def data_form():
     
     #Formato de la fecha 
     dead_line.append(date(year,cast_month(month),day))
+    print(type(date(year,cast_month(month),day)))
 
 #Avisar una semana antes la tarea a realizar
 def notify_me():
     #Por cada día en el arreglo de fecha
     for day in dead_line:
+        
         #Verifica si coincide la fecha de hoy con alguna del arreglo
-        if(date.today() == day):
+        if(date.today() == day or date.today()):
+        
             #Si coincide entonces dame en índice de la fecha
             reference = dead_line.index(day)
+        
             #Lanza una notificación
             notification = ToastNotifier()
             notification.show_toast(
-                #Usando la referencia del indice puedo buscar 
-                #los elementos que tengo que mostrar en los 
+        
+                #Usando la referencia del indice, puedo buscar 
+                #los elementos que tengo que mostrar de los 
                 #otros arreglos
                 header_text[reference],
                 text_todo[reference],
                 duration = 10
             )
 
+            #Elimo el elemento de la lista
+            dead_line.pop(day)
+            print(dead_line)
 
-option = "y"
-while option == "y":
-    data_form()
-    option = input("Again? [y/n]> ")
 
-notify_me()
+
+if __name__ == "__main__":
+    option = "y"
+    while option == "y":
+        data_form()
+        option = input("Again? [y/n]> ")
+
+    notify_me()
     
-
-    
-
-'''
-notification = ToastNotifier()
-notification.show_toast(
-    "Header",
-    "Text",
-    duration = 10
-    )
-'''
